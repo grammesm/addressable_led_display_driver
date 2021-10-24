@@ -196,7 +196,7 @@ void setup()
     lightingManager.init();
     delay(3000);
     lightingManager.setProgram(twinkle);
-    lightingManager.setPalette(&Palettes::Haloween_p);
+    lightingManager.setPalette(Palettes::Haloween);
 
     // Add debug blocks
     debugLoopTimer.blockAdd(0, "LoopTimer");
@@ -214,13 +214,14 @@ void setup()
 
 void chooseNextColorPalette()
 {
-    Log.traceln("Switching Color Palette");
     const uint8_t numberOfPalettes = sizeof(Palettes::ActivePaletteList) / sizeof(Palettes::ActivePaletteList[0]);
     static uint8_t whichPalette = -1;
     whichPalette = addmod8(whichPalette, 1, numberOfPalettes);
-    lightingManager.setPalette(Palettes::ActivePaletteList[whichPalette]);
+    const Palette* palette = Palettes::ActivePaletteList[whichPalette];
+    lightingManager.setPalette(palette);
 }
 
+uint8_t brightness = 0;
 void loop()
 {
 
@@ -283,6 +284,9 @@ void loop()
     {
         chooseNextColorPalette();
     }
+    // EVERY_N_MILLISECONDS(10) {
+    //     lightingManager.setBrigthness(brightness++);
+    // }
     lightingManager.service();
     debugLoopTimer.blockEnd(15);
 }

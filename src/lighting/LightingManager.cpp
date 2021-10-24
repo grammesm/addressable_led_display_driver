@@ -5,7 +5,6 @@ LightingManager::LightingManager() {
     FastLED.setMaxPowerInVoltsAndMilliamps( VOLTS, MAX_MA);
     FastLED.addLeds<LED_TYPE,LED_PIN,COLOR_ORDER>(leds, NUM_LEDS)
         .setCorrection(TypicalLEDStrip);
-    FastLED.setBrightness(BRIGHTNESS);
 }
 
 LightingManager::~LightingManager() {
@@ -17,14 +16,21 @@ void LightingManager::setProgram(LightingProgram* program) {
     Log.traceln("Set Current Program: %s", currentProgram->getName());
 }
 
-void LightingManager::setPalette(const TProgmemRGBPalette16* pallete) {
+void LightingManager::setPalette(const Palette* palette) {
     if (currentProgram != NULL) {
-        currentProgram->setCurrentPalette(pallete);
+        Log.traceln("Switching Color Palette: %s", palette->getName());
+        currentProgram->setCurrentPalette(palette->getPalette());
     }
+}
+
+void LightingManager::setBrigthness(uint8_t newBrightness) {
+    brightness = newBrightness;
+    FastLED.setBrightness(brightness);
 }
 
 void LightingManager::init() {
     FastLED.clear();
+    FastLED.setBrightness(brightness);
     FastLED.show();
     Log.traceln("Lighting Manager Init Complete");
 }

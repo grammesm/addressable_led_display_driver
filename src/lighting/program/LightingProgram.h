@@ -36,7 +36,6 @@ public:
     }
     virtual void setCurrentPalette(const TProgmemRGBPalette16 *palette)
     {
-        Log.traceln("Lighting Program: setCurrentPalette:");
         currentPalette = *palette;
     }
     virtual void setBlendType(TBlendType blendType)

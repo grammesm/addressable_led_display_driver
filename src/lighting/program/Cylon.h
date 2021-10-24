@@ -29,7 +29,6 @@ public:
 
     void init()
     {
-        FastLED.setBrightness(84);
     }
 
     void service()

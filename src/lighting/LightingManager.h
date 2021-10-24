@@ -1,6 +1,7 @@
 #pragma once
 
 #include "program/LightingProgram.h"
+#include "Palette.h"
 
 #define NUM_LEDS      300
 #define LED_TYPE   WS2811
@@ -9,12 +10,12 @@
 #define VOLTS          12
 #define MAX_MA       4000
 #define PATTERN_LEN 4
-#define BRIGHTNESS  64
 
 class LightingManager {
-
+// TODO store brightness in NVRAM
 private:
     LightingProgram* currentProgram;
+    uint8_t brightness = 128;
 
 public:
     CRGB* leds = new CRGB[NUM_LEDS];
@@ -23,7 +24,11 @@ public:
     ~LightingManager();
 
     void setProgram(LightingProgram* program);
-    void setPalette(const TProgmemRGBPalette16* pallete);
+    void setPalette(const Palette* palette);
+    void setBrigthness(uint8_t newBrightness);
+    uint8_t getBrightness() {
+        return brightness;
+    }
     void setDelayMs(int delay) {
         if (currentProgram != NULL) {
             currentProgram->setDelayMs(delay);
