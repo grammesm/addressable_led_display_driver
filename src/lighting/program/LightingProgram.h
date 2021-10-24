@@ -11,17 +11,21 @@ class LightingProgram
 protected:
     CRGB *leds;
     int numLeds;
-    const char *_name;
+    String _name;
     CRGBPalette16 currentPalette;
     TBlendType currentBlend;
     int delayMs = 0;
 
 public:
-    LightingProgram(CRGB *ledArray, int num, const char *name) : leds(ledArray), numLeds(num), _name(name) {}
+    LightingProgram(CRGB *ledArray, int num, String name) {
+        leds = ledArray;
+        numLeds = num;
+        _name = name;
+    }
     ~LightingProgram() {}
     virtual void init() = 0;
     virtual void service() = 0;
-    const char *getName()
+    const String getName() const
     {
         return _name;
     }

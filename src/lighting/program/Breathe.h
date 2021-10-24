@@ -5,7 +5,6 @@
 class Breathe : public LightingProgram
 {
 private:
-    const char *name = "Breathe";
     uint8_t brightness = 128;
 
     float pulseSpeed = 0.5; // Larger value gives faster pulse.
@@ -25,7 +24,7 @@ private:
     float delta = (valueMax - valueMin) / 2.35040238; // Do Not Edit
 
 public:
-    Breathe(CRGB *ledArray, int num) : LightingProgram(ledArray, num, name) {}
+    Breathe(CRGB *ledArray, int num) : LightingProgram(ledArray, num, "Breathe") {}
     ~Breathe() {}
     void init();
     void service();

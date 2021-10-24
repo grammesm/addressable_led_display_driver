@@ -103,10 +103,8 @@ private:
 // incandescent bulbs change color as they get dim down.
 #define COOL_LIKE_INCANDESCENT 1
 
-    const char *name = "Twinkle";
-
 public:
-    Twinkle(CRGB *ledArray, int num) : LightingProgram(ledArray, num, name) {}
+    Twinkle(CRGB *ledArray, int num) : LightingProgram(ledArray, num, "Twinkle") {}
     ~Twinkle() {}
 
     // This function is like 'triwave8', which produces a

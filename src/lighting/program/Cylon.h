@@ -6,12 +6,11 @@
 class Cylon : public LightingProgram
 {
 private:
-    const char *name = "Cylon";
     bool alternate = true;
     uint8_t hue = 0;
 
 public:
-    Cylon(CRGB *ledArray, int num) : LightingProgram(ledArray, num, name) {}
+    Cylon(CRGB *ledArray, int num) : LightingProgram(ledArray, num, "Cylon") {}
     ~Cylon() {}
 
     void fadeall()

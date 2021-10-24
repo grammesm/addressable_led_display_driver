@@ -15,10 +15,11 @@ LightingManager::~LightingManager()
 
 bool LightingManager::setProgram(const char *programName)
 {
-
+    Log.traceln("setProgram: %s", programName);
     for (LightingProgram *p : ActivePrograms)
     {
-        if (strcmp(p->getName(), programName) == 0)
+        Log.traceln("Looking at program : %s", p->getName());
+        if (strcmp(p->getName().c_str(), programName) == 0)
         {
             currentProgram = p;
             currentProgram->init();
@@ -32,6 +33,7 @@ bool LightingManager::setProgram(const char *programName)
 
 bool LightingManager::setPalette(const char *paletteName)
 {
+    Log.traceln("setPalette: %s", paletteName);
     for (const Palette *p : Palettes::ActivePaletteList)
     {
         if (strcmp(p->getName(), paletteName) == 0)
@@ -44,6 +46,11 @@ bool LightingManager::setPalette(const char *paletteName)
             }
             return true;
         }
+    }
+    if (strcmp(paletteName, "working") == 0) {
+        currentPaletteName = paletteName;
+        Log.traceln("Using working palette");
+        currentProgram->setCurrentPalette((TProgmemRGBPalette16*) &workingPalette);
     }
     return false;
 }
@@ -114,4 +121,11 @@ String LightingManager::getActiveProgramsJsonStr()
     }
     jsonStr += "]";
     return jsonStr;
+}
+
+void LightingManager::setSingleColor(int color) {
+    for (int i = 0; i < 16; i++) {
+        workingPalette[i] = color;
+        setPalette("working");
+    }
 }

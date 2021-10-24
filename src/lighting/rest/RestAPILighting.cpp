@@ -27,6 +27,9 @@ void RestAPILighting::setup(RestAPIEndpoints &endpoints)
     endpoints.addEndpoint("getColorPalettes", RestAPIEndpointDef::ENDPOINT_CALLBACK, RestAPIEndpointDef::ENDPOINT_GET, 
                     std::bind(&RestAPILighting::apiPalettesGet, this, std::placeholders::_1, std::placeholders::_2),
                     "Gets available color palettes");
+    endpoints.addEndpoint("setSingleColor", RestAPIEndpointDef::ENDPOINT_CALLBACK, RestAPIEndpointDef::ENDPOINT_GET, 
+                    std::bind(&RestAPILighting::apiSingleColorSet, this, std::placeholders::_1, std::placeholders::_2),
+                    "Sets one color");
 }
 
 void RestAPILighting::apiBrightnessGet(String &reqStr, String &respStr)
@@ -100,3 +103,18 @@ void RestAPILighting::apiPalettesGet(String &reqStr, String &respStr)
 
     Utils::setJsonBoolResult(respStr, true, paletteJson.c_str());
 }
+
+void RestAPILighting::apiSingleColorSet(String &reqStr, String &respStr)
+{
+    bool result = false;
+
+    int newColor = RestAPIEndpoints::getNthArgStr(reqStr.c_str(), 1).toInt();
+
+    Log.traceln("%sSet New Color: %s = %s", MODULE_PREFIX, reqStr.c_str(), String(newColor, HEX));
+
+    _lightingManager.setSingleColor(newColor);
+    result = true;
+
+    Utils::setJsonBoolResult(respStr, result);
+}
+

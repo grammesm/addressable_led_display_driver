@@ -5,6 +5,7 @@
 #include "program/Twinkle.h"
 #include "program/Breathe.h"
 #include "program/Cylon.h"
+#include "program/SingleColor.h"
 
 #include "Palette.h"
 
@@ -22,17 +23,20 @@ private:
     String currentPaletteName;
     uint8_t brightness = 128;
     CRGB* leds = new CRGB[NUM_LEDS];
+    CRGBPalette16 workingPalette;
 
     LightingProgram *fastLedExample = new FastLedExample(leds, NUM_LEDS);
     LightingProgram *twinkle = new Twinkle(leds, NUM_LEDS);
     LightingProgram *breathe = new Breathe(leds, NUM_LEDS);
     LightingProgram *cylon = new Cylon(leds, NUM_LEDS);
+    LightingProgram *singleColor = new SingleColor(leds, NUM_LEDS);
 
-    LightingProgram* ActivePrograms[4] = {
+    LightingProgram* ActivePrograms[5] = {
         fastLedExample,
         twinkle,
         breathe,
-        cylon
+        cylon,
+        singleColor
     };
 
 public:
@@ -57,6 +61,8 @@ public:
     void service();
 
     void chooseNextColorPalette();
+
+    void setSingleColor(int color);
 
     String getActivePalettesJsonStr();
     String getActiveProgramsJsonStr();
