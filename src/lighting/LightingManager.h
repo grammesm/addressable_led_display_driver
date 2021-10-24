@@ -1,6 +1,11 @@
 #pragma once
 
 #include "program/LightingProgram.h"
+#include "program/FastExample.h"
+#include "program/Twinkle.h"
+#include "program/Breathe.h"
+#include "program/Cylon.h"
+
 #include "Palette.h"
 
 #define NUM_LEDS      300
@@ -9,22 +14,34 @@
 #define LED_PIN        4
 #define VOLTS          12
 #define MAX_MA       4000
-#define PATTERN_LEN 4
 
 class LightingManager {
-// TODO store brightness in NVRAM
+// TODO store config/brightness in NVRAM
 private:
     LightingProgram* currentProgram;
+    String currentPaletteName;
     uint8_t brightness = 128;
+    CRGB* leds = new CRGB[NUM_LEDS];
+
+    LightingProgram *fastLedExample = new FastLedExample(leds, NUM_LEDS);
+    LightingProgram *twinkle = new Twinkle(leds, NUM_LEDS);
+    LightingProgram *breathe = new Breathe(leds, NUM_LEDS);
+    LightingProgram *cylon = new Cylon(leds, NUM_LEDS);
+
+    LightingProgram* ActivePrograms[4] = {
+        fastLedExample,
+        twinkle,
+        breathe,
+        cylon
+    };
 
 public:
-    CRGB* leds = new CRGB[NUM_LEDS];
 
     LightingManager();
     ~LightingManager();
 
-    void setProgram(LightingProgram* program);
-    void setPalette(const Palette* palette);
+    bool setProgram(const char* programName);
+    bool setPalette(const char* paletteName);
     void setBrigthness(uint8_t newBrightness);
     uint8_t getBrightness() {
         return brightness;
@@ -35,6 +52,9 @@ public:
         }
     }
 
+    String getPaletteListJson();
     void init();
     void service();
+
+    void chooseNextColorPalette();
 };

@@ -5,7 +5,7 @@
 class FastLedExample : public LightingProgram
 {
 private:
-    const char *name = "FastLED Example";
+    const char *name = "ScrollingBanner";
     uint8_t brightness = 64;
 
 public:

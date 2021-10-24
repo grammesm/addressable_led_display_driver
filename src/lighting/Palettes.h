@@ -121,22 +121,6 @@ namespace Palettes
 
     const Palette *Haloween = new Palette("Haloween", &Haloween_p);
 
-    // Add or remove palette names from this list to control which color
-    // palettes are used, and in what order.
-    // const TProgmemRGBPalette16 *ActivePaletteList[] = {
-    //     &RetroC9_p,
-    //     &BlueWhite_p,
-    //     &RainbowColors_p,
-    //     &FairyLight_p,
-    //     &RedGreenWhite_p,
-    //     &PartyColors_p,
-    //     &RedWhite_p,
-    //     &Snow_p,
-    //     &Holly_p,
-    //     &Ice_p,
-    //     &RedWhiteBlue,
-    //     &Haloween_p};
-
     const Palette *ActivePaletteList[] = {
         RedWhiteBlue,
         Holly,
@@ -147,7 +131,7 @@ namespace Palettes
         Snow,
         RetroC9,
         Ice,
-        Haloween
+        Haloween,
     };
 
 }

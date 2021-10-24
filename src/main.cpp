@@ -112,19 +112,14 @@ RestAPISystem restAPISystem(wifiManager,
 #include "DebugLoopTimer.h"
 
 #include "lighting/LightingManager.h"
-#include "lighting/Palettes.h"
 LightingManager lightingManager;
 
 #include "lighting/program/LightingProgram.h"
-#include "lighting/program/FastExample.h"
-#include "lighting/program/Twinkle.h"
-#include "lighting/program/Breathe.h"
-#include "lighting/program/Cylon.h"
 
-LightingProgram *fastLedExample = new FastLedExample(lightingManager.leds, NUM_LEDS);
-LightingProgram *twinkle = new Twinkle(lightingManager.leds, NUM_LEDS);
-LightingProgram *breathe = new Breathe(lightingManager.leds, NUM_LEDS);
-LightingProgram *cylon = new Cylon(lightingManager.leds, NUM_LEDS);
+// REST API Lighting
+#include "lighting/rest/RestAPILighting.h"
+RestAPILighting restAPILighting(lightingManager);
+
 
 // Debug loop timer and callback function
 void debugLoopInfoCallback(String &infoStr)
@@ -181,6 +176,7 @@ void setup()
     // Add API endpoints
     restAPISystem.setup(restAPIEndpoints);
     //restAPIRobot.setup(restAPIEndpoints);
+    restAPILighting.setup(restAPIEndpoints);
 
     // Web server
     webServer.setup(hwConfig);
@@ -195,8 +191,10 @@ void setup()
 
     lightingManager.init();
     delay(3000);
-    lightingManager.setProgram(twinkle);
-    lightingManager.setPalette(Palettes::Haloween);
+    lightingManager.setProgram("Twinkle");
+    lightingManager.setPalette("Haloween");
+
+
 
     // Add debug blocks
     debugLoopTimer.blockAdd(0, "LoopTimer");
@@ -210,15 +208,6 @@ void setup()
     debugLoopTimer.blockAdd(9, "Sched");
     debugLoopTimer.blockAdd(10, "WifiLed");
     debugLoopTimer.blockAdd(15, "LightingManager");
-}
-
-void chooseNextColorPalette()
-{
-    const uint8_t numberOfPalettes = sizeof(Palettes::ActivePaletteList) / sizeof(Palettes::ActivePaletteList[0]);
-    static uint8_t whichPalette = -1;
-    whichPalette = addmod8(whichPalette, 1, numberOfPalettes);
-    const Palette* palette = Palettes::ActivePaletteList[whichPalette];
-    lightingManager.setPalette(palette);
 }
 
 uint8_t brightness = 0;
@@ -280,10 +269,10 @@ void loop()
     debugLoopTimer.blockEnd(10);
 
     debugLoopTimer.blockStart(15);
-    EVERY_N_SECONDS(SECONDS_PER_PALETTE)
-    {
-        chooseNextColorPalette();
-    }
+    // EVERY_N_SECONDS(SECONDS_PER_PALETTE)
+    // {
+    //     lightingManager.chooseNextColorPalette();
+    // }
     // EVERY_N_MILLISECONDS(10) {
     //     lightingManager.setBrigthness(brightness++);
     // }

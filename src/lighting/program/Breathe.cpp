@@ -8,7 +8,8 @@ void Breathe::service()
 {
     float dV = ((exp(sin(pulseSpeed * millis() / 2000.0 * PI)) - 0.36787944) * delta);
     val = valueMin + dV;
-    hue = map(val, valueMin, valueMax, hueA, hueB); // Map hue based on current val
+    hue = map(val, valueMin, valueMax, rgb2hsv_approximate(currentPalette[0]).hue, rgb2hsv_approximate(currentPalette[15]).hue); // Map hue based on current val
+    //hue = map(val, valueMin, valueMax, hueA, hueB); // Map hue based on current val
     sat = map(val, valueMin, valueMax, satA, satB); // Map sat based on current val
 
     for (int i = 0; i < numLeds; i++)
