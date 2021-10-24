@@ -79,3 +79,39 @@ void LightingManager::chooseNextColorPalette()
     const Palette *palette = Palettes::ActivePaletteList[whichPalette];
     setPalette(palette->getName());
 }
+
+String LightingManager::getActivePalettesJsonStr()
+{
+    const uint8_t numberOfPalettes = sizeof(Palettes::ActivePaletteList) / sizeof(Palettes::ActivePaletteList[0]);
+    String jsonStr;
+    jsonStr += "\"palettes\":[";
+    for (int i = 0; i < numberOfPalettes; i++)
+    {
+        const Palette *p = Palettes::ActivePaletteList[i];
+        jsonStr += p->getPaletteJson();
+        if (i < (numberOfPalettes - 1))
+        {
+            jsonStr += ",";
+        }
+    }
+    jsonStr += "]";
+    return jsonStr;
+}
+
+String LightingManager::getActiveProgramsJsonStr()
+{
+    const uint8_t numberOfPrograms = sizeof(ActivePrograms) / sizeof(ActivePrograms[0]);
+    String jsonStr;
+    jsonStr += "\"programs\":[";
+    for (int i = 0; i < numberOfPrograms; i++)
+    {
+        LightingProgram *p = ActivePrograms[i];
+        jsonStr += p->getProgramJson();
+        if (i < (numberOfPrograms - 1))
+        {
+            jsonStr += ",";
+        }
+    }
+    jsonStr += "]";
+    return jsonStr;
+}

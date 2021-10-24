@@ -17,7 +17,7 @@ namespace Palettes
          CRGB::Gray, CRGB::Gray, CRGB::Blue, CRGB::Blue,
          CRGB::Blue, CRGB::Blue, CRGB::Blue, CRGB::Blue};
 
-    const Palette *RedWhiteBlue = new Palette("RedWhiteBlue", &RedWhiteBlue_p);
+    const Palette *RedWhiteBlue = new Palette("RedWhiteBlue", "Red, White and Blue Striped", &RedWhiteBlue_p);
 
     // A mostly red palette with green accents and white trim.
     // "CRGB::Gray" is used as white to keep the brightness more uniform.
@@ -27,7 +27,7 @@ namespace Palettes
          CRGB::Red, CRGB::Red, CRGB::Gray, CRGB::Gray,
          CRGB::Green, CRGB::Green, CRGB::Green, CRGB::Green};
 
-    const Palette *RedGreenWhite = new Palette("RedGreenWhite", &RedGreenWhite_p);
+    const Palette *RedGreenWhite = new Palette("RedGreenWhite", "A mostly red palette with green accents and white trim.", &RedGreenWhite_p);
 
 // A mostly (dark) green palette with red berries.
 #define Holly_Green 0x00580c
@@ -38,7 +38,7 @@ namespace Palettes
          Holly_Green, Holly_Green, Holly_Green, Holly_Green,
          Holly_Green, Holly_Green, Holly_Green, Holly_Red};
 
-    const Palette *Holly = new Palette("HollyGreenWRed", &Holly_p);
+    const Palette *Holly = new Palette("HollyGreenWRed", "A mostly (dark) green palette with red berries", &Holly_p);
 
     // A red and white striped palette
     // "CRGB::Gray" is used as white to keep the brightness more uniform.
@@ -48,7 +48,7 @@ namespace Palettes
          CRGB::Red, CRGB::Red, CRGB::Red, CRGB::Red,
          CRGB::Gray, CRGB::Gray, CRGB::Gray, CRGB::Gray};
 
-    const Palette *RedWhite = new Palette("RedWhite", &RedWhite_p);
+    const Palette *RedWhite = new Palette("RedWhite", "Red and white striped", &RedWhite_p);
 
     // A mostly blue palette with white accents.
     // "CRGB::Gray" is used as white to keep the brightness more uniform.
@@ -58,7 +58,7 @@ namespace Palettes
          CRGB::Blue, CRGB::Blue, CRGB::Blue, CRGB::Blue,
          CRGB::Blue, CRGB::Gray, CRGB::Gray, CRGB::Gray};
 
-    const Palette *BlueWhite = new Palette("BlueWhite", &BlueWhite_p);
+    const Palette *BlueWhite = new Palette("BlueWhite", "Mostly blue palette with white accents", &BlueWhite_p);
 
 // A pure "fairy light" palette with some brightness variations
 #define HALFFAIRY ((CRGB::FairyLight & 0xFEFEFE) / 2)
@@ -69,7 +69,7 @@ namespace Palettes
          QUARTERFAIRY, QUARTERFAIRY, CRGB::FairyLight, CRGB::FairyLight,
          CRGB::FairyLight, CRGB::FairyLight, CRGB::FairyLight, CRGB::FairyLight};
 
-    const Palette *FairyLight = new Palette("FairyLight", &FairyLight_p);
+    const Palette *FairyLight = new Palette("FairyLight", "A pure fairy light palette with some brightness variations", &FairyLight_p);
 
     // A palette of soft snowflakes with the occasional bright one
     const TProgmemRGBPalette16 Snow_p FL_PROGMEM =
@@ -78,7 +78,7 @@ namespace Palettes
          0x304048, 0x304048, 0x304048, 0x304048,
          0x304048, 0x304048, 0x304048, 0xE0F0FF};
 
-    const Palette *Snow = new Palette("Snow", &Snow_p);
+    const Palette *Snow = new Palette("Snow", "Soft snowflakes with the occasional bright one", &Snow_p);
 
 // A palette reminiscent of large 'old-school' C9-size tree lights
 // in the five classic colors: red, orange, green, blue, and white.
@@ -94,7 +94,7 @@ namespace Palettes
          C9_Blue, C9_Blue, C9_Blue,
          C9_White};
 
-    const Palette *RetroC9 = new Palette("RetroC9", &RetroC9_p);
+    const Palette *RetroC9 = new Palette("RetroC9", "Reminiscent of large old-school C9-size tree lights", &RetroC9_p);
 
 // A cold, icy pale blue palette
 #define Ice_Blue1 0x0C1040
@@ -107,7 +107,7 @@ namespace Palettes
             Ice_Blue1, Ice_Blue1, Ice_Blue1, Ice_Blue1,
             Ice_Blue2, Ice_Blue2, Ice_Blue2, Ice_Blue3};
 
-    const Palette *Ice = new Palette("Ice", &Ice_p);
+    const Palette *Ice = new Palette("Ice", "A cold, icy pale blue palette", &Ice_p);
 
 // Halloween palette
 #define Orange2 0xfb4e04
@@ -119,7 +119,7 @@ namespace Palettes
             C9_Orange, C9_Orange, C9_Orange, C9_Orange,
             Orange2, Orange2, Orange2, Orange3};
 
-    const Palette *Haloween = new Palette("Haloween", &Haloween_p);
+    const Palette *Haloween = new Palette("Haloween", "Haloween Orange Colors", &Haloween_p);
 
     const Palette *ActivePaletteList[] = {
         RedWhiteBlue,

@@ -106,7 +106,7 @@ private:
     const char *name = "Twinkle";
 
 public:
-    Twinkle(CRGB *ledArray, int num) : LightingProgram(ledArray, num) {}
+    Twinkle(CRGB *ledArray, int num) : LightingProgram(ledArray, num, name) {}
     ~Twinkle() {}
 
     // This function is like 'triwave8', which produces a
@@ -142,12 +142,6 @@ public:
     //  either the twinkle color of the background color,
     //  whichever is brighter.
     void drawTwinkles();
-
-    const char *getName()
-    {
-        return name;
-    }
-
     void init();
     void service();
 };

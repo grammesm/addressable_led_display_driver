@@ -11,20 +11,20 @@ class LightingProgram
 protected:
     CRGB *leds;
     int numLeds;
+    const char *_name;
     CRGBPalette16 currentPalette;
     TBlendType currentBlend;
     int delayMs = 0;
 
 public:
-    LightingProgram(CRGB *ledArray, int num)
-    {
-        leds = ledArray;
-        numLeds = num;
-    }
+    LightingProgram(CRGB *ledArray, int num, const char *name) : leds(ledArray), numLeds(num), _name(name) {}
     ~LightingProgram() {}
-    virtual const char *getName() = 0;
     virtual void init() = 0;
     virtual void service() = 0;
+    const char *getName()
+    {
+        return _name;
+    }
     virtual void executePostShow() {}
     void setDelayMs(int newDelay)
     {
@@ -42,5 +42,16 @@ public:
     {
         Log.traceln("Lighting Program: setBlendType:");
         currentBlend = blendType;
+    }
+    String getProgramJson()
+    {
+        String jsonStr;
+        jsonStr += "{";
+        jsonStr += "\"name\":";
+        jsonStr += "\"";
+        jsonStr += _name;
+        jsonStr += "\"";
+        jsonStr += "}";
+        return jsonStr;
     }
 };

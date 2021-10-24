@@ -57,4 +57,7 @@ public:
     void service();
 
     void chooseNextColorPalette();
+
+    String getActivePalettesJsonStr();
+    String getActiveProgramsJsonStr();
 };

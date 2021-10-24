@@ -19,6 +19,8 @@ public:
     // Overall
     void apiBrightnessGet(String &reqStr, String &respStr);
     void apiBrightnessSet(String &reqStr, String &respStr);
+    void apiProgramsGet(String &reqStr, String &respStr);
     void apiProgramSet(String &reqStr, String &respStr);
     void apiPaletteSet(String &reqStr, String &respStr);
+    void apiPalettesGet(String &reqStr, String &respStr);
 };

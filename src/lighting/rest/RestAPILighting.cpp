@@ -15,12 +15,18 @@ void RestAPILighting::setup(RestAPIEndpoints &endpoints)
     endpoints.addEndpoint("setLedBrightness", RestAPIEndpointDef::ENDPOINT_CALLBACK, RestAPIEndpointDef::ENDPOINT_GET, 
                     std::bind(&RestAPILighting::apiBrightnessSet, this, std::placeholders::_1, std::placeholders::_2),
                     "Set current LED brightness");
+    endpoints.addEndpoint("getLedPrograms", RestAPIEndpointDef::ENDPOINT_CALLBACK, RestAPIEndpointDef::ENDPOINT_GET, 
+                    std::bind(&RestAPILighting::apiProgramsGet, this, std::placeholders::_1, std::placeholders::_2),
+                    "Gets available LED programs");
     endpoints.addEndpoint("setLedProgram", RestAPIEndpointDef::ENDPOINT_CALLBACK, RestAPIEndpointDef::ENDPOINT_GET, 
                     std::bind(&RestAPILighting::apiProgramSet, this, std::placeholders::_1, std::placeholders::_2),
                     "Set current LED program");
     endpoints.addEndpoint("setLedColorPalette", RestAPIEndpointDef::ENDPOINT_CALLBACK, RestAPIEndpointDef::ENDPOINT_GET, 
                     std::bind(&RestAPILighting::apiPaletteSet, this, std::placeholders::_1, std::placeholders::_2),
                     "Set color palette for current program if supported");
+    endpoints.addEndpoint("getColorPalettes", RestAPIEndpointDef::ENDPOINT_CALLBACK, RestAPIEndpointDef::ENDPOINT_GET, 
+                    std::bind(&RestAPILighting::apiPalettesGet, this, std::placeholders::_1, std::placeholders::_2),
+                    "Gets available color palettes");
 }
 
 void RestAPILighting::apiBrightnessGet(String &reqStr, String &respStr)
@@ -64,6 +70,15 @@ void RestAPILighting::apiProgramSet(String &reqStr, String &respStr)
     Utils::setJsonBoolResult(respStr, result);
 }
 
+void RestAPILighting::apiProgramsGet(String &reqStr, String &respStr)
+{
+    bool result = false;
+
+    String programJson = _lightingManager.getActiveProgramsJsonStr();
+
+    Utils::setJsonBoolResult(respStr, true, programJson.c_str());
+}
+
 void RestAPILighting::apiPaletteSet(String &reqStr, String &respStr)
 {
     bool result = false;
@@ -75,4 +90,13 @@ void RestAPILighting::apiPaletteSet(String &reqStr, String &respStr)
     result = _lightingManager.setPalette(newPalette.c_str());
 
     Utils::setJsonBoolResult(respStr, result);
+}
+
+void RestAPILighting::apiPalettesGet(String &reqStr, String &respStr)
+{
+    bool result = false;
+
+    String paletteJson = _lightingManager.getActivePalettesJsonStr();
+
+    Utils::setJsonBoolResult(respStr, true, paletteJson.c_str());
 }

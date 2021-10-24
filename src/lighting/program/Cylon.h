@@ -11,13 +11,8 @@ private:
     uint8_t hue = 0;
 
 public:
-    Cylon(CRGB *ledArray, int num) : LightingProgram(ledArray, num) {}
+    Cylon(CRGB *ledArray, int num) : LightingProgram(ledArray, num, name) {}
     ~Cylon() {}
-
-    const char *getName()
-    {
-        return name;
-    }
 
     void fadeall()
     {

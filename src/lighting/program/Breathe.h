@@ -25,14 +25,8 @@ private:
     float delta = (valueMax - valueMin) / 2.35040238; // Do Not Edit
 
 public:
-    Breathe(CRGB *ledArray, int num) : LightingProgram(ledArray, num) {}
+    Breathe(CRGB *ledArray, int num) : LightingProgram(ledArray, num, name) {}
     ~Breathe() {}
-
-    const char *getName()
-    {
-        return name;
-    }
-
     void init();
     void service();
 };

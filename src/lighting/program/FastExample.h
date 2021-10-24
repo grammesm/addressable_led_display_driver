@@ -9,13 +9,8 @@ private:
     uint8_t brightness = 64;
 
 public:
-    FastLedExample(CRGB *ledArray, int num) : LightingProgram(ledArray, num) {}
+    FastLedExample(CRGB *ledArray, int num) : LightingProgram(ledArray, num, name) {}
     ~FastLedExample() {}
-
-    const char *getName()
-    {
-        return name;
-    }
 
     void FillLEDsFromPaletteColors(uint8_t colorIndex);
     void init();
