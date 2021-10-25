@@ -4,7 +4,7 @@ void Breathe::init()
 {
 }
 
-void Breathe::service()
+void Breathe::servicePreShow()
 {
     float dV = ((exp(sin(pulseSpeed * millis() / 2000.0 * PI)) - 0.36787944) * delta);
     val = valueMin + dV;
@@ -22,5 +22,4 @@ void Breathe::service()
         leds[i].g = dim8_video(leds[i].g);
         leds[i].b = dim8_video(leds[i].b);
     }
-    FastLED.show();
 }

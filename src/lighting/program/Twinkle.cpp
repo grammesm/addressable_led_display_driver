@@ -161,8 +161,7 @@ void Twinkle::init()
 {
 }
 
-void Twinkle::service()
+void Twinkle::servicePreShow()
 {
   drawTwinkles();
-  FastLED.show();
 }

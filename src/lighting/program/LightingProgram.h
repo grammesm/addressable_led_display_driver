@@ -13,7 +13,7 @@ protected:
     int numLeds;
     String _name;
     CRGBPalette16 currentPalette;
-    TBlendType currentBlend;
+    TBlendType currentBlend = LINEARBLEND;
     int delayMs = 0;
 
 public:
@@ -24,12 +24,12 @@ public:
     }
     ~LightingProgram() {}
     virtual void init() = 0;
-    virtual void service() = 0;
+    virtual void servicePreShow() = 0;
     const String getName() const
     {
         return _name;
     }
-    virtual void executePostShow() {}
+    virtual void servicePostShow() {}
     void setDelayMs(int newDelay)
     {
         delayMs = newDelay;

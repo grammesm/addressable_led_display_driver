@@ -8,9 +8,12 @@ class Cylon : public LightingProgram
 private:
     bool alternate = true;
     uint8_t hue = 0;
+    int index = 0;
 
 public:
-    Cylon(CRGB *ledArray, int num) : LightingProgram(ledArray, num, "Cylon") {}
+    Cylon(CRGB *ledArray, int num) : LightingProgram(ledArray, num, "Cylon") {
+        delayMs = 5;
+    }
     ~Cylon() {}
 
     void fadeall()
@@ -25,34 +28,28 @@ public:
     {
     }
 
-    void service()
+    void servicePreShow()
     {
-        // First slide the led in one direction
-        for (int i = 0; i < numLeds; i++)
-        {
-            // Set the i'th led to red
-            leds[i] = CHSV(hue++, 255, 255);
-            // Show the leds
-            FastLED.show();
-            // now that we've shown the leds, reset the i'th led to black
-            // leds[i] = CRGB::Black;
-            fadeall();
-            // Wait a little bit before we loop around and do it again
-            delay(10);
+        
+        leds[index] = ColorFromPalette(currentPalette, hue);//, brightness, currentBlend);
+        hue += 3;
+        if (alternate) {
+            index++;
+          if (index >= numLeds) {
+              index = numLeds - 1;
+              alternate = false;
+          }
+        } else {
+            index--;
+          if (index <= 0) {
+              index = 0;
+              alternate = true;
+          }
         }
+    }
 
-        // Now go in the other direction.
-        for (int i = (numLeds)-1; i >= 0; i--)
-        {
-            // Set the i'th led to red
-            leds[i] = CHSV(hue++, 255, 255);
-            // Show the leds
-            FastLED.show();
-            // now that we've shown the leds, reset the i'th led to black
-            // leds[i] = CRGB::Black;S
-            fadeall();
-            // Wait a little bit before we loop around and do it again
-            delay(10);
-        }
+    void servicePostShow()
+    {
+        fadeall();
     }
 };

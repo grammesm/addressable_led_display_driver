@@ -141,5 +141,5 @@ public:
     //  whichever is brighter.
     void drawTwinkles();
     void init();
-    void service();
+    void servicePreShow();
 };

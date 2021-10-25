@@ -71,7 +71,9 @@ void LightingManager::init()
 
 void LightingManager::service()
 {
-    currentProgram->service();
+    currentProgram->servicePreShow();
+    FastLED.show();
+    currentProgram->servicePostShow();
     if (currentProgram->getDelayMs() > 0)
     {
         delay(currentProgram->getDelayMs());

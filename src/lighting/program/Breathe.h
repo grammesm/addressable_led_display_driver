@@ -27,5 +27,5 @@ public:
     Breathe(CRGB *ledArray, int num) : LightingProgram(ledArray, num, "Breathe") {}
     ~Breathe() {}
     void init();
-    void service();
+    void servicePreShow();
 };

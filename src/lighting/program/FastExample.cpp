@@ -15,10 +15,9 @@ void FastLedExample::init()
     setDelayMs(10);
 }
 
-void FastLedExample::service()
+void FastLedExample::servicePreShow()
 {
     static uint8_t startIndex = 0;
     startIndex = startIndex + 1; /* motion speed */
     FillLEDsFromPaletteColors(startIndex);
-    FastLED.show();
 }

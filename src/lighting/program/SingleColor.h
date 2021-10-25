@@ -14,10 +14,9 @@ public:
     void init() {
 
     }
-    void service() {
+    void servicePreShow() {
         for (int i = 0; i < numLeds; i++) {
             leds[i] = currentPalette[0];
         }
-        FastLED.show();
     }
 };

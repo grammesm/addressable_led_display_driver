@@ -13,5 +13,5 @@ public:
 
     void FillLEDsFromPaletteColors(uint8_t colorIndex);
     void init();
-    void service();
+    void servicePreShow();
 };
