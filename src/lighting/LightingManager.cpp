@@ -2,7 +2,9 @@
 #include <ArduinoLog.h>
 #include "Palettes.h"
 
-LightingManager::LightingManager()
+static const char *MODULE_PREFIX = "LightingManager: ";
+
+LightingManager::LightingManager(ConfigBase &lightingConfig) : _lightingConfig(lightingConfig)
 {
     FastLED.setMaxPowerInVoltsAndMilliamps(VOLTS, MAX_MA);
     FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS)
@@ -15,14 +17,34 @@ LightingManager::~LightingManager()
 
 void LightingManager::init()
 {
+    // If there is no LED data stored, set to default
+    String lightingConfigStr = _lightingConfig.getConfigString();
+    if (lightingConfigStr.length() == 0 || lightingConfigStr.equals("{}"))
+    {
+        Log.trace("%sNo Lighting Data Found in NV Storge, Defaulting\n", MODULE_PREFIX);
+        // Default to Twinkle, RedWhiteBlue
+        currentProgram = twinkle;
+        setPalette(Palettes::RedWhiteBlue->getName());
+    } else {
+        Log.traceln("%sLighting Config Found: %s", MODULE_PREFIX, lightingConfigStr.c_str());
+        String currentProgramStr = _lightingConfig.getString("program", "Twinkle");
+        currentPaletteName = _lightingConfig.getString("palette", "RedWhiteBlue");
+        brightness = _lightingConfig.getLong("brightness", 128);
+        setProgram(currentProgramStr.c_str());
+        setPalette(currentPaletteName.c_str());
+    }
+
     FastLED.clear();
     FastLED.setBrightness(brightness);
     FastLED.show();
-    Log.traceln("Lighting Manager Init Complete");
+    Log.traceln("%sLighting Manager Init Complete", MODULE_PREFIX);
 }
 
 void LightingManager::service()
 {
+    if (currentProgram == NULL) {
+        return;
+    }
     currentProgram->servicePreShow();
     FastLED.show();
     currentProgram->servicePostShow();
@@ -39,18 +61,38 @@ void LightingManager::service()
     }
 }
 
+void LightingManager::updateNvRam()
+{
+    String jsonStr;
+    jsonStr += "{";
+    jsonStr += "\"program\":";
+    jsonStr += "\"" + currentProgram->getName() + "\"";
+    jsonStr += ",";
+    jsonStr += "\"palette\":";
+    jsonStr += "\"" + currentPaletteName + "\"";
+    jsonStr += ",";
+    jsonStr += "\"brightness\":";
+    jsonStr += brightness;
+    jsonStr += "}";
+    _lightingConfig.setConfigData(jsonStr.c_str());
+    _lightingConfig.writeConfig();
+    Log.trace("%supdateNvRam() : wrote %s\n", MODULE_PREFIX, _lightingConfig.getConfigCStrPtr());
+    
+}
+
 bool LightingManager::setProgram(const char *programName)
 {
-    Log.traceln("setProgram: %s", programName);
+    Log.traceln("%ssetProgram: %s", MODULE_PREFIX, programName);
     for (LightingProgram *p : ActivePrograms)
     {
-        Log.traceln("Looking at program : %s", p->getName());
+        Log.traceln("%sLooking at program : %s", MODULE_PREFIX, p->getName().c_str());
         if (strcmp(p->getName().c_str(), programName) == 0)
         {
             currentProgram = p;
             currentProgram->init();
             setPalette(currentPaletteName.c_str());
-            Log.traceln("Set Current Program: %s", currentProgram->getName());
+            Log.traceln("%sSet Current Program: %s", MODULE_PREFIX, currentProgram->getName().c_str());
+            updateNvRam();
             return true;
         }
     }
@@ -59,7 +101,7 @@ bool LightingManager::setProgram(const char *programName)
 
 bool LightingManager::setPalette(const char *paletteName)
 {
-    Log.traceln("setPalette: %s", paletteName);
+    Log.traceln("%ssetPalette: %s", MODULE_PREFIX, paletteName);
     for (const Palette *p : Palettes::ActivePaletteList)
     {
         if (strcmp(p->getName(), paletteName) == 0)
@@ -67,16 +109,18 @@ bool LightingManager::setPalette(const char *paletteName)
             currentPaletteName = paletteName;
             if (currentProgram != NULL)
             {
-                Log.traceln("Switching Color Palette: %s", p->getName());
+                Log.traceln("%sSwitching Color Palette: %s", MODULE_PREFIX, p->getName());
                 currentProgram->setCurrentPalette(p->getPalette());
             }
+            updateNvRam();
             return true;
         }
     }
     if (strcmp(paletteName, "working") == 0)
     {
         currentPaletteName = paletteName;
-        Log.traceln("Using working palette");
+        updateNvRam();
+        Log.traceln("%sUsing working palette", MODULE_PREFIX);
         currentProgram->setCurrentPalette((TProgmemRGBPalette16 *)&workingPalette);
     }
     return false;
@@ -86,6 +130,7 @@ void LightingManager::setBrigthness(uint8_t newBrightness)
 {
     brightness = newBrightness;
     FastLED.setBrightness(brightness);
+    updateNvRam();
 }
 
 void LightingManager::chooseNextColorPalette()

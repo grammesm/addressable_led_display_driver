@@ -86,6 +86,9 @@ ConfigNVS netLogConfig("netLog", 200);
 // Config for CommandScheduler
 ConfigNVS cmdSchedulerConfig("cmdSched", 500);
 
+// Config for LightingManager
+ConfigNVS lightingConfig("lightMgr", 250);
+
 // CommandScheduler - time-based commands
 #include "CommandScheduler.h"
 CommandScheduler commandScheduler;
@@ -112,7 +115,7 @@ RestAPISystem restAPISystem(wifiManager,
 #include "DebugLoopTimer.h"
 
 #include "lighting/LightingManager.h"
-LightingManager lightingManager;
+LightingManager lightingManager(lightingConfig);
 
 #include "lighting/program/LightingProgram.h"
 
@@ -189,10 +192,11 @@ void setup()
     // Network logging
     netLog.setup(&netLogConfig, wifiManager.getHostname().c_str());
 
+    lightingConfig.setup();
     lightingManager.init();
     delay(3000);
-    lightingManager.setProgram("Twinkle");
-    lightingManager.setPalette("Haloween");
+    // lightingManager.setProgram("Twinkle");
+    // lightingManager.setPalette("Haloween");
 
 
 

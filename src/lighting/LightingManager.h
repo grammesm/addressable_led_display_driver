@@ -9,6 +9,8 @@
 
 #include "Palette.h"
 
+#include "ConfigNVS.h"
+
 #define NUM_LEDS      300
 #define LED_TYPE   WS2811
 #define COLOR_ORDER   RGB
@@ -43,9 +45,14 @@ private:
         singleColor
     };
 
+    // Config
+    ConfigBase& _lightingConfig;
+
+    void updateNvRam();
+
 public:
 
-    LightingManager();
+    LightingManager(ConfigBase &lightingConfig);
     ~LightingManager();
 
     bool setProgram(const char* programName);
