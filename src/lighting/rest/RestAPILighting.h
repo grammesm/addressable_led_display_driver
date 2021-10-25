@@ -22,6 +22,7 @@ public:
     void apiProgramsGet(String &reqStr, String &respStr);
     void apiProgramSet(String &reqStr, String &respStr);
     void apiPaletteSet(String &reqStr, String &respStr);
-    void apiPalettesGet(String &reqStr, String &respStr);
+    void apiAvailablePalettesGet(String &reqStr, String &respStr);
+    void apiActivePalettesGet(String &reqStr, String &respStr);
     void apiSingleColorSet(String &reqStr, String &respStr);
 };

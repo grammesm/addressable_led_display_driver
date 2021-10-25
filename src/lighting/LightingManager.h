@@ -25,6 +25,10 @@ private:
     CRGB* leds = new CRGB[NUM_LEDS];
     CRGBPalette16 workingPalette;
 
+    bool autoChangePalette = false;
+    int autoChangeSeconds = 30;
+
+
     LightingProgram *fastLedExample = new FastLedExample(leds, NUM_LEDS);
     LightingProgram *twinkle = new Twinkle(leds, NUM_LEDS);
     LightingProgram *breathe = new Breathe(leds, NUM_LEDS);
@@ -64,6 +68,7 @@ public:
 
     void setSingleColor(int color);
 
+    String getAvailablePalettesJsonStr();
     String getActivePalettesJsonStr();
     String getActiveProgramsJsonStr();
 };

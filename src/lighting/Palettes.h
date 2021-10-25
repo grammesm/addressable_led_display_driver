@@ -121,6 +121,19 @@ namespace Palettes
 
     const Palette *Haloween = new Palette("Haloween", "Haloween Orange Colors", &Haloween_p);
 
+    const Palette *AvailablePaletteList[] = {
+        RedWhiteBlue,
+        Holly,
+        RedGreenWhite,
+        RedWhite,
+        BlueWhite,
+        FairyLight,
+        Snow,
+        RetroC9,
+        Ice,
+        Haloween,
+    };
+
     const Palette *ActivePaletteList[] = {
         RedWhiteBlue,
         Holly,

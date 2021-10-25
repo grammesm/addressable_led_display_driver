@@ -13,6 +13,32 @@ LightingManager::~LightingManager()
 {
 }
 
+void LightingManager::init()
+{
+    FastLED.clear();
+    FastLED.setBrightness(brightness);
+    FastLED.show();
+    Log.traceln("Lighting Manager Init Complete");
+}
+
+void LightingManager::service()
+{
+    currentProgram->servicePreShow();
+    FastLED.show();
+    currentProgram->servicePostShow();
+    if (currentProgram->getDelayMs() > 0)
+    {
+        delay(currentProgram->getDelayMs());
+    }
+    if (autoChangePalette)
+    {
+        EVERY_N_SECONDS(autoChangeSeconds)
+        {
+            chooseNextColorPalette();
+        }
+    }
+}
+
 bool LightingManager::setProgram(const char *programName)
 {
     Log.traceln("setProgram: %s", programName);
@@ -47,10 +73,11 @@ bool LightingManager::setPalette(const char *paletteName)
             return true;
         }
     }
-    if (strcmp(paletteName, "working") == 0) {
+    if (strcmp(paletteName, "working") == 0)
+    {
         currentPaletteName = paletteName;
         Log.traceln("Using working palette");
-        currentProgram->setCurrentPalette((TProgmemRGBPalette16*) &workingPalette);
+        currentProgram->setCurrentPalette((TProgmemRGBPalette16 *)&workingPalette);
     }
     return false;
 }
@@ -59,25 +86,6 @@ void LightingManager::setBrigthness(uint8_t newBrightness)
 {
     brightness = newBrightness;
     FastLED.setBrightness(brightness);
-}
-
-void LightingManager::init()
-{
-    FastLED.clear();
-    FastLED.setBrightness(brightness);
-    FastLED.show();
-    Log.traceln("Lighting Manager Init Complete");
-}
-
-void LightingManager::service()
-{
-    currentProgram->servicePreShow();
-    FastLED.show();
-    currentProgram->servicePostShow();
-    if (currentProgram->getDelayMs() > 0)
-    {
-        delay(currentProgram->getDelayMs());
-    }
 }
 
 void LightingManager::chooseNextColorPalette()
@@ -107,6 +115,24 @@ String LightingManager::getActivePalettesJsonStr()
     return jsonStr;
 }
 
+String LightingManager::getAvailablePalettesJsonStr()
+{
+    const uint8_t numberOfPalettes = sizeof(Palettes::AvailablePaletteList) / sizeof(Palettes::AvailablePaletteList[0]);
+    String jsonStr;
+    jsonStr += "\"palettes\":[";
+    for (int i = 0; i < numberOfPalettes; i++)
+    {
+        const Palette *p = Palettes::AvailablePaletteList[i];
+        jsonStr += p->getPaletteJson();
+        if (i < (numberOfPalettes - 1))
+        {
+            jsonStr += ",";
+        }
+    }
+    jsonStr += "]";
+    return jsonStr;
+}
+
 String LightingManager::getActiveProgramsJsonStr()
 {
     const uint8_t numberOfPrograms = sizeof(ActivePrograms) / sizeof(ActivePrograms[0]);
@@ -125,8 +151,10 @@ String LightingManager::getActiveProgramsJsonStr()
     return jsonStr;
 }
 
-void LightingManager::setSingleColor(int color) {
-    for (int i = 0; i < 16; i++) {
+void LightingManager::setSingleColor(int color)
+{
+    for (int i = 0; i < 16; i++)
+    {
         workingPalette[i] = color;
         setPalette("working");
     }
