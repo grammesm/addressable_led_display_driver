@@ -11,25 +11,30 @@
 
 #include "ConfigNVS.h"
 
-#define NUM_LEDS      300
-#define LED_TYPE   WS2811
-#define COLOR_ORDER   RGB
-#define LED_PIN        4
-#define VOLTS          12
-#define MAX_MA       4000
+#define NUM_LEDS 300
+#define LED_TYPE WS2811
+#define COLOR_ORDER RGB
+#define LED_PIN 4
+#define VOLTS 12
+#define MAX_MA 4000
 
-class LightingManager {
-// TODO store config/brightness in NVRAM
+class LightingManager
+{
+    // TODO store config/brightness in NVRAM
 private:
-    LightingProgram* currentProgram;
+    LightingProgram *currentProgram;
     String currentPaletteName;
     uint8_t brightness = 128;
-    CRGB* leds = new CRGB[NUM_LEDS];
-    CRGBPalette16 workingPalette;
+    CRGB *leds = new CRGB[NUM_LEDS];
 
     bool autoChangePalette = false;
     int autoChangeSeconds = 30;
-
+    int singleColorCode = 0xffffff;
+    CRGBPalette16 workingPalette =
+        {CRGB::White, CRGB::White, CRGB::White, CRGB::White,
+         CRGB::White, CRGB::White, CRGB::White, CRGB::White,
+         CRGB::White, CRGB::White, CRGB::White, CRGB::White,
+         CRGB::White, CRGB::White, CRGB::White, CRGB::White};
 
     LightingProgram *fastLedExample = new FastLedExample(leds, NUM_LEDS);
     LightingProgram *twinkle = new Twinkle(leds, NUM_LEDS);
@@ -37,32 +42,33 @@ private:
     LightingProgram *cylon = new Cylon(leds, NUM_LEDS);
     LightingProgram *singleColor = new SingleColor(leds, NUM_LEDS);
 
-    LightingProgram* ActivePrograms[5] = {
+    LightingProgram *ActivePrograms[5] = {
         fastLedExample,
         twinkle,
         breathe,
         cylon,
-        singleColor
-    };
+        singleColor};
 
     // Config
-    ConfigBase& _lightingConfig;
+    ConfigBase &_lightingConfig;
 
     void updateNvRam();
 
 public:
-
     LightingManager(ConfigBase &lightingConfig);
     ~LightingManager();
 
-    bool setProgram(const char* programName);
-    bool setPalette(const char* paletteName);
+    bool setProgram(const char *programName);
+    bool setPalette(const char *paletteName);
     void setBrigthness(uint8_t newBrightness);
-    uint8_t getBrightness() {
+    uint8_t getBrightness()
+    {
         return brightness;
     }
-    void setDelayMs(int delay) {
-        if (currentProgram != NULL) {
+    void setDelayMs(int delay)
+    {
+        if (currentProgram != NULL)
+        {
             currentProgram->setDelayMs(delay);
         }
     }
@@ -75,6 +81,7 @@ public:
 
     void setSingleColor(int color);
 
+    String getStatusJsonStr();
     String getAvailablePalettesJsonStr();
     String getActivePalettesJsonStr();
     String getActiveProgramsJsonStr();

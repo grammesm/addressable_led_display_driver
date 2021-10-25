@@ -30,8 +30,10 @@ void LightingManager::init()
         String currentProgramStr = _lightingConfig.getString("program", "Twinkle");
         currentPaletteName = _lightingConfig.getString("palette", "RedWhiteBlue");
         brightness = _lightingConfig.getLong("brightness", 128);
+        singleColorCode = _lightingConfig.getLong("sColor", 0xffffff);
         setProgram(currentProgramStr.c_str());
         setPalette(currentPaletteName.c_str());
+        setSingleColor(singleColorCode);
     }
 
     FastLED.clear();
@@ -73,6 +75,9 @@ void LightingManager::updateNvRam()
     jsonStr += ",";
     jsonStr += "\"brightness\":";
     jsonStr += brightness;
+    jsonStr += ",";
+    jsonStr += "\"sColor\":";
+    jsonStr += singleColorCode;
     jsonStr += "}";
     _lightingConfig.setConfigData(jsonStr.c_str());
     _lightingConfig.writeConfig();
@@ -116,12 +121,15 @@ bool LightingManager::setPalette(const char *paletteName)
             return true;
         }
     }
-    if (strcmp(paletteName, "working") == 0)
+    if (strcmp(paletteName, "single") == 0)
     {
         currentPaletteName = paletteName;
         updateNvRam();
         Log.traceln("%sUsing working palette", MODULE_PREFIX);
-        currentProgram->setCurrentPalette((TProgmemRGBPalette16 *)&workingPalette);
+        if (currentProgram != NULL)
+        {
+            currentProgram->setCurrentPalette((TProgmemRGBPalette16 *)&workingPalette);
+        }
     }
     return false;
 }
@@ -140,6 +148,10 @@ void LightingManager::chooseNextColorPalette()
     whichPalette = addmod8(whichPalette, 1, numberOfPalettes);
     const Palette *palette = Palettes::ActivePaletteList[whichPalette];
     setPalette(palette->getName());
+}
+
+String LightingManager::getStatusJsonStr() {
+    return "\"status\":" + _lightingConfig.getConfigString();
 }
 
 String LightingManager::getActivePalettesJsonStr()
@@ -197,10 +209,17 @@ String LightingManager::getActiveProgramsJsonStr()
 }
 
 void LightingManager::setSingleColor(int color)
-{
+{   
+    singleColorCode = color;
+    Log.traceln("%ssetSingleColor() : %s", MODULE_PREFIX, String(color, HEX));
+    updateNvRam();
     for (int i = 0; i < 16; i++)
     {
         workingPalette[i] = color;
-        setPalette("working");
+    }
+    if (currentPaletteName != NULL) {
+        if (strcmp(currentPaletteName.c_str(), "single") == 0) {
+            setPalette("single");
+        }
     }
 }

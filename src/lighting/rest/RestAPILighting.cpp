@@ -9,6 +9,9 @@ RestAPILighting::RestAPILighting(LightingManager& lightingManager) :
 
 void RestAPILighting::setup(RestAPIEndpoints &endpoints)
 {
+    endpoints.addEndpoint("status", RestAPIEndpointDef::ENDPOINT_CALLBACK, RestAPIEndpointDef::ENDPOINT_GET, 
+                    std::bind(&RestAPILighting::apiStatus, this, std::placeholders::_1, std::placeholders::_2),
+                    "Get current status");
     endpoints.addEndpoint("getLedBrightness", RestAPIEndpointDef::ENDPOINT_CALLBACK, RestAPIEndpointDef::ENDPOINT_GET, 
                     std::bind(&RestAPILighting::apiBrightnessGet, this, std::placeholders::_1, std::placeholders::_2),
                     "Get current LED brightness");
@@ -33,6 +36,11 @@ void RestAPILighting::setup(RestAPIEndpoints &endpoints)
     endpoints.addEndpoint("setSingleColor", RestAPIEndpointDef::ENDPOINT_CALLBACK, RestAPIEndpointDef::ENDPOINT_GET, 
                     std::bind(&RestAPILighting::apiSingleColorSet, this, std::placeholders::_1, std::placeholders::_2),
                     "Sets one color");
+}
+
+void RestAPILighting::apiStatus(String &reqStr, String &respStr)
+{
+    Utils::setJsonBoolResult(respStr, true, _lightingManager.getStatusJsonStr().c_str());
 }
 
 void RestAPILighting::apiBrightnessGet(String &reqStr, String &respStr)

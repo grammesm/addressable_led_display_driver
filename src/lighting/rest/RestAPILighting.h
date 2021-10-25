@@ -17,6 +17,7 @@ public:
     void setup(RestAPIEndpoints &endpoints);
 
     // Overall
+    void apiStatus(String &reqStr, String &respStr);
     void apiBrightnessGet(String &reqStr, String &respStr);
     void apiBrightnessSet(String &reqStr, String &respStr);
     void apiProgramsGet(String &reqStr, String &respStr);
